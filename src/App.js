@@ -5,7 +5,11 @@ import { AgGridReact } from 'ag-grid-react'
 import 'ag-grid-community/dist/styles/ag-grid.css'
 import 'ag-grid-community/dist/styles/ag-theme-alpine.css'
 
+import { getPreferences, savePreferences } from './preferences'
+
 const KEY = 'ag-grid-demo-saved-state'
+const INPUT = 'input'
+const COLUMNS = 'columns'
 
 const initialColumnDefs = [{
 	headerName: "Make", field: "make", sortable: true
@@ -25,7 +29,10 @@ const rowData = [{
 
 const App = () => {
 	//window.localStorage.removeItem(KEY)
-	const [savedState, setSavedState] = useState(JSON.parse(window.localStorage.getItem(KEY)))
+	//const [savedState, setSavedState] = useState(JSON.parse(window.localStorage.getItem(KEY)))
+
+	const [input, setInput] = useState(getPreferences(INPUT))
+	const [columns, setColumns] = useState(getPreferences(COLUMNS))
 	const [data, setData] = useState(rowData)
 
 	const filter = input => {
@@ -43,45 +50,34 @@ const App = () => {
 	}
 
 	useEffect(() => {
-		if (savedState && savedState.input) {
-			filter(savedState.input)
+		if (input) {
+			filter(input)
 		}
-	}, [savedState])
+	}, [input])
 
 	const { register, handleSubmit } = useForm({
-		defaultValues: savedState && savedState.input ? savedState.input : ''
+		defaultValues: input ? input : ''
 	})
 
-	const columnDefs = savedState && savedState.columnDefs
-		? savedState.columnDefs
+	const columnDefs = columns
+		? columns
 		: initialColumnDefs
 
 	const onSubmit = input => {
 		filter(input)
-		window.localStorage.setItem(KEY, JSON.stringify({
-			...JSON.parse(window.localStorage.getItem(KEY)),
-			input: input,
-		}))
+		savePreferences(INPUT, input)
 	}
 
 	const resetToDefault = () => {
-		const defaultSavedState = {
-			input: [],
-			columnDefs: initialColumnDefs,
-		}
-		setSavedState(defaultSavedState)
-		window.localStorage.setItem(KEY, JSON.stringify(defaultSavedState))
+		setInput([])
+		setColumns(initialColumnDefs)
+		savePreferences(INPUT, [])
+		savePreferences(COLUMNS, initialColumnDefs)
 	}
 
 	const onDisplayedColumnsChanged = (params) => {
-		const columnApi = params.columnApi
-		const newSavedState = {
-			...savedState,
-			columnDefs: columnApi.getAllDisplayedColumns().map(column => column.colDef),
-		}
-		//setSavedState(newSavedState)
-		window.localStorage.setItem(KEY, JSON.stringify(newSavedState))
-		console.log('a')
+		const columnsState = params.columnApi.getAllDisplayedColumns().map(column => column.colDef)
+		savePreferences(COLUMNS, columnsState)
 	}
 
 	return (
