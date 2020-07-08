@@ -77,6 +77,7 @@ const App = () => {
 
 	const onDisplayedColumnsChanged = (params) => {
 		const columnsState = params.columnApi.getAllDisplayedColumns().map(column => column.colDef)
+		setColumns(columnsState)
 		savePreferences(COLUMNS, columnsState)
 	}
 
