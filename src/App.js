@@ -65,6 +65,7 @@ const App = () => {
 
 	const onSubmit = input => {
 		filter(input)
+		setInput(input)
 		savePreferences(INPUT, input)
 	}
 
@@ -82,47 +83,55 @@ const App = () => {
 	}
 
 	return (
-		<div>
-			<form onSubmit={handleSubmit(onSubmit)} onReset={resetToDefault}>
-				<h5>Filter:</h5>
-				<div>
-					<label>Make</label>
-					<input name="make" ref={register()} />
+		<div style={{ display: 'flex' }}>
+			<div>
+				<form onSubmit={handleSubmit(onSubmit)} onReset={resetToDefault}>
+					<h5>Filter:</h5>
+					<div>
+						<label>Make</label>
+						<input name="make" ref={register()} />
+					</div>
+
+					<div>
+						<label>Model</label>
+						<input name="model" ref={register()} />
+					</div>
+
+					<div>
+						<label>Price</label>
+						<input placeholder="Min price" name="minPrice" ref={register()} />
+						<br />
+						<input placeholder="Max price" name="maxPrice" ref={register()} />
+					</div>
+
+					<button type="submit">
+						Apply
+					</button>
+
+					<button type="reset">
+						Reset
+					</button>
+				</form>
+
+				<div
+					className="ag-theme-alpine"
+					style={{
+						height: '200px',
+						width: '620px',
+					}}
+				>
+					<AgGridReact
+						onDragStopped={onDisplayedColumnsChanged}
+						columnDefs={columnDefs}
+						rowData={data}>
+					</AgGridReact>
 				</div>
+			</div>
 
-				<div>
-					<label>Model</label>
-					<input name="model" ref={register()} />
-				</div>
-
-				<div>
-					<label>Price</label>
-					<input placeholder="Min price" name="minPrice" ref={register()} />
-					<br />
-					<input placeholder="Max price" name="maxPrice" ref={register()} />
-				</div>
-
-				<button type="submit">
-					Apply
-				</button>
-
-				<button type="reset">
-					Reset
-				</button>
-			</form>
-
-			<div
-				className="ag-theme-alpine"
-				style={{
-					height: '200px',
-					width: '620px',
-				}}
-			>
-				<AgGridReact
-					onDragStopped={onDisplayedColumnsChanged}
-					columnDefs={columnDefs}
-					rowData={data}>
-				</AgGridReact>
+			<div style={{ marginLeft: '24px'}}>
+				JSON String to be saved in the database:
+				<pre>{JSON.stringify({input: input}, null, 2)}</pre>
+				<pre>{JSON.stringify({columns: columns}, null, 2)}</pre>
 			</div>
 		</div>
 	)
