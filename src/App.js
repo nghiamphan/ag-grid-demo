@@ -7,24 +7,24 @@ import 'ag-grid-community/dist/styles/ag-theme-alpine.css'
 
 import { getPreferences, savePreferences } from './preferences'
 
-const KEY = 'ag-grid-demo-saved-state'
+//const KEY = 'ag-grid-demo-saved-state'
 const INPUT = 'input'
 const COLUMNS = 'columns'
 
 const initialColumnDefs = [{
-	headerName: "Make", field: "make", sortable: true
+	headerName: 'Make', field: 'make', sortable: true
 }, {
-	headerName: "Model", field: "model", sortable: true
+	headerName: 'Model', field: 'model', sortable: true
 }, {
-	headerName: "Price", field: "price", sortable: true
+	headerName: 'Price', field: 'price', sortable: true
 }]
 
 const rowData = [{
-	make: "Toyota", model: "Celica", price: 35000
+	make: 'Toyota', model: 'Celica', price: 35000
 }, {
-	make: "Ford", model: "Mondeo", price: 32000
+	make: 'Ford', model: 'Mondeo', price: 32000
 }, {
-	make: "Porsche", model: "Boxter", price: 72000
+	make: 'Porsche', model: 'Boxter', price: 72000
 }]
 
 const App = () => {
@@ -128,10 +128,10 @@ const App = () => {
 				</div>
 			</div>
 
-			<div style={{ marginLeft: '24px'}}>
+			<div style={{ marginLeft: '24px' }}>
 				JSON String to be saved in the database:
-				<pre>{JSON.stringify({input: input}, null, 2)}</pre>
-				<pre>{JSON.stringify({columns: columns}, null, 2)}</pre>
+				<pre>{JSON.stringify({ input: input }, null, 2)}</pre>
+				<pre>{JSON.stringify({ columns: columns }, null, 2)}</pre>
 			</div>
 		</div>
 	)
